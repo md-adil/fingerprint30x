@@ -28,7 +28,7 @@ void Biometric::init() {
 
 void Biometric::loop() {
 
-	if(isActionCompleted && !isFingerTuched) {
+	if(isActionCompleted && isFingerTuched > 5) {
 		isScanning = true;
 	}
 
@@ -118,11 +118,11 @@ bool Biometric::takeImage() {
 
 	switch(driver->getImage()) {
 		case FINGERPRINT_OK:
-			isFingerTuched = true;
+			isFingerTuched = 0;
 			return true;
 
 		case FINGERPRINT_NOFINGER:
-			isFingerTuched = false;
+			isFingerTuched++;
 			break;
 
 		case FINGERPRINT_PACKETRECIEVEERR:
@@ -176,6 +176,7 @@ void Biometric::changePassword() {
 
 void Biometric::onFound(SearchClosure callback) {
 	searchClosure = callback;
+	isScanning = true;
 }
 
 void Biometric::enroll(uint32_t id, EnrollClosure callback) {
@@ -237,7 +238,7 @@ uint8_t * Biometric::downloadTemplate(uint32_t id) {
 	return fingerTemplate;
 }
 
-void Biometric::uploadTemplate() {
+void Biometric::uploadTemplate(uint8_t * tpl) {
 	
 }
 
@@ -259,7 +260,7 @@ void Biometric::actionCompleted(Action action, char * err) {
 			if(searchClosure) {
 				searchClosure(err, finger);
 			}
-			if(!isFingerTuched) {
+			if(isFingerTuched > 5) {
 				isScanning = true;
 			}
 			break;

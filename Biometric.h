@@ -26,7 +26,7 @@ public:
 	void cancelEnroll();
 	void changePassword();
 	void verifyPassword();
-	void uploadTemplate();
+	void uploadTemplate(uint8_t *);
 	uint8_t * downloadTemplate(uint32_t);
 	void onConnect(ConnectClosure);
 	void startScan();
@@ -40,7 +40,7 @@ private:
 	SoftwareSerial * serial;
 	bool isScanning = false;
 	bool isEnrolling = false;
-	bool isFingerTuched = false;
+	uint8_t isFingerTuched = 0;
 	bool isTakeImage = true;
 	bool isActionCompleted = false;
 
