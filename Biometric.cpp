@@ -70,6 +70,7 @@ void Biometric::startSearch() {
 		case FINGERPRINT_NOTFOUND:
 			if(searchClosure) {
 				searchClosure(NULL, f);
+				isActionCompleted = true;
 			}
 			// do something
 			break;
